@@ -9,20 +9,27 @@ const Converter = () => {
     clearTimeout(timeOutRef.current);
     const value = e.target.value;
     setInput(value);
-
+  
+    const processInput = () => {
+      if (validateInput(value)) {
+        let { r, g, b } = hexToRgb(value);
+        setOutput(`rgb(${r}, ${g}, ${b})`);
+      } else {
+        setOutput("Ошибка!");
+      }
+    };
+  
     if (value === "") {
       setOutput("");
+    } else if (value.length === 7) {
+      processInput();
     } else {
       timeOutRef.current = setTimeout(() => {
-        if (validateInput(value)) {
-          let { r, g, b } = hexToRgb(value);
-          setOutput(`rgb(${r}, ${g}, ${b})`);
-        } else {
-          setOutput("Ошибка!");
-        }
-      }, 1000);
+        processInput();
+      }, 2000);
     }
   };
+  
 
   const validateInput = (input) => /^#([0-9a-f]{3}){1,2}$/i.test(input);
 
